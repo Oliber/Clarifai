@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(i, "Select Image"), PICK_IMAGE_REQUEST);
-                
+                onActivityResult();
             }
         });
     }
