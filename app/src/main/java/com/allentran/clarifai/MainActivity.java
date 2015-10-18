@@ -1,5 +1,6 @@
 package com.allentran.clarifai;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -10,12 +11,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.clarifai.api.ClarifaiClient;
+import com.clarifai.api.RecognitionRequest;
+import com.clarifai.api.RecognitionResult;
+import com.clarifai.api.Tag;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private int PICK_IMAGE_REQUEST = 1;
+    private final String APP_ID = "hjerQocu0N0dt324XLZw4agpUf-PuMibm5ILwW77";
+    private final String APP_SECRET = "jhEaJ74h1dEfVy8MUuM3uZ5vsm_VeSsfaO5TCHA1";
+    private String selectedImagePath = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +43,23 @@ public class MainActivity extends AppCompatActivity {
                 i.setType("image/*");
                 i.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(i, "Select Image"), PICK_IMAGE_REQUEST);
-                onActivityResult();
+                ClarifaiClient clar = new ClarifaiClient(APP_ID, APP_SECRET);
+                ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                List<RecognitionResult> results =
+                        clar.recognize(new RecognitionRequest(selectedImagePath));
+                TextView filePath = (TextView) findViewById(R.id.textView2);
+                filePath.setText(selectedImagePath);
+                ScrollView view = (ScrollView) findViewById(R.id.scrollView);
+                GridLayout scroll = new GridLayout(getApplicationContext());
+                scroll.setColumnCount(3);
+                ArrayList<View> genTags = new ArrayList<View>();
+                for(Tag tag : results.get(0).getTags()) {
+                    TextView text = new TextView(getApplicationContext());
+                    text.setText(tag.getName() + ": " + tag.getProbability());
+                    genTags.add(text);
+                }
+                scroll.addChildrenForAccessibility(genTags);
+                view.addView(scroll);
             }
         });
     }
@@ -38,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK &&
                 data!= null && data.getData() != null) {
             Uri uri = data.getData();
+            selectedImagePath = uri.getPath();
 
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
@@ -48,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            }
         }
-        }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
