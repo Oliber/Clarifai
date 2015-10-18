@@ -15,35 +15,27 @@
         android:layout_height="wrap_content"
         android:text="@string/button"
         android:id="@+id/button"
-        android:layout_marginRight="33dp"
-        android:layout_marginEnd="33dp"
-        android:layout_marginTop="33dp"
-        android:layout_below="@+id/textView" />
+        android:layout_marginTop="34dp"
+        android:layout_below="@+id/textView"
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView" />
 
-    <ScrollView
-        android:layout_width="500dp"
-        android:layout_height="150dp"
-        android:id="@+id/scrollView"
-        android:layout_alignParentBottom="true"
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+        android:id="@+id/imageView"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="file path"
+        android:text="New Text"
         android:id="@+id/textView2"
-        android:layout_alignTop="@+id/button"
-        android:layout_toLeftOf="@+id/button"
-        android:layout_toStartOf="@+id/button"
-        android:layout_alignBottom="@+id/button"
-        android:textSize="14dp" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/imageView"
+        android:layout_toEndOf="@+id/imageView"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_below="@+id/button" />
 
 </RelativeLayout>
